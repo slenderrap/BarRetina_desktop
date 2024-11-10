@@ -1,13 +1,12 @@
 package com.project.Views;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 import com.project.Utils.ErrorPopup;
 import com.project.Utils.UtilsConfig;
 import com.project.Utils.UtilsViews;
+import com.project.Utils.UtilsWS;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -34,6 +33,7 @@ public class ConfigurationControler {
             return;
         }
         UtilsConfig.saveConfig(serverUrl, placeTextField.getText());
+        UtilsWS.init(serverUrl.toString());
         UtilsViews.setView("CommandList");
     }
 }

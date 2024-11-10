@@ -7,8 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.Views.CommandListControler">
    <children>
       <VBox prefHeight="400.0" prefWidth="95.0" spacing="50.0" HBox.hgrow="ALWAYS">
          <padding>
@@ -20,12 +19,12 @@
       </VBox>
       <VBox alignment="CENTER" prefHeight="400.0" prefWidth="173.0" spacing="40.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Productes">
+            <Button mnemonicParsing="false" onAction="#onProductsButtonClick" prefHeight="150.0" prefWidth="150.0" text="Productes">
                <font>
                   <Font name="SansSerif Regular" size="25.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="150.0" prefWidth="150.0" text="Tags">
+            <Button mnemonicParsing="false" onAction="#onTagsButtonClick" prefHeight="150.0" prefWidth="150.0" text="Tags">
                <font>
                   <Font size="25.0" />
                </font>
