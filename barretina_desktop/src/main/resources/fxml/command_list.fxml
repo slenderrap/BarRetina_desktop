@@ -19,14 +19,14 @@
       </VBox>
       <VBox alignment="CENTER" prefHeight="400.0" prefWidth="173.0" spacing="40.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#onProductsButtonClick" prefHeight="150.0" prefWidth="150.0" text="Productes">
+            <Button mnemonicParsing="false" onAction="#onProductsButtonClick" prefHeight="150.0" prefWidth="150.0" styleClass="btn" text="Productes">
                <font>
                   <Font name="SansSerif Regular" size="25.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#onTagsButtonClick" prefHeight="150.0" prefWidth="150.0" text="Tags">
+            <Button mnemonicParsing="false" onAction="#onTagsButtonClick" prefHeight="150.0" prefWidth="150.0" styleClass="btn" text="Tags">
                <font>
-                  <Font size="25.0" />
+                  <Font name="SansSerif Regular" size="25.0" />
                </font>
             </Button>
          </children>

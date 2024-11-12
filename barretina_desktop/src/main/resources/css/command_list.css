@@ -1,0 +1,19 @@
+@font-face {
+    -fx-font-family: "SourceSerifPro";
+    src: url("../fonts/SourceSerifPro/SourceSerifPro-Regular.otf");
+}
+
+.btn {
+    -fx-font-family: "SourceSerifPro";
+    -fx-font-size: 25px;
+    -fx-background-color: #479055;
+    -fx-text-fill: white;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.btn:hover {
+    -fx-background-color: #366d41;
+}
+

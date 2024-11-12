@@ -62,6 +62,7 @@ public class TagsControler implements OnSceneVisible {
             String tag = tags.getString(i);
             this.tags.add(tag);
             Label tagLabel = new Label(tag);
+            tagLabel.getStyleClass().add("tag");
             tagsList.getChildren().add(tagLabel);
         }
     }

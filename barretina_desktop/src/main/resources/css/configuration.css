@@ -1,0 +1,59 @@
+@font-face {
+    -fx-font-family: "SourceSerifPro";
+    src: url("../fonts/SourceSerifPro/SourceSerifPro-Regular.otf");
+}
+
+.root {
+    -fx-primary-color: #479055;
+    -fx-secondary-color: #366d41;
+}
+
+.title {
+    -fx-font-size: 30px;
+    -fx-padding: 20px;
+    -fx-alignment: center;
+}
+
+.inputContainer {
+    -fx-spacing: 10px;
+    -fx-padding: 5px;
+    -fx-alignment: center;
+}
+
+.inputLabel {
+    -fx-font-family: "SourceSerifPro";
+    -fx-padding: 5px;
+    -fx-min-width: 120px;
+}
+
+.inputField {
+    -fx-padding: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #cccccc;
+    -fx-background-color: white;
+    -fx-min-width: 200px;
+}
+
+.saveButton {
+    -fx-font-size: 25px;
+    -fx-font-family: "SourceSerifPro";
+    -fx-background-color: #479055;
+    -fx-text-fill: white;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.saveButton:hover {
+    -fx-font-family: "SourceSerifPro";
+    -fx-background-color: #479055;
+    -fx-text-fill: white;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.saveButton:hover {
+    -fx-background-color: #366d41;
+}
