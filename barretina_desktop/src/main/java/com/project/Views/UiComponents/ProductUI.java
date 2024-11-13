@@ -18,7 +18,6 @@ public class ProductUI extends Region {
 
     // UI Components
     private final HBox mainContainer;
-    private final Label idLabel;
     private final Label nameLabel;
     private final VBox tagsList;
     private final Label descriptionLabel;
@@ -34,23 +33,30 @@ public class ProductUI extends Region {
         this.price.set(product.getPrice());
 
         //Initialize UI Components
-        idLabel = new Label("ID: " + productId.get());
-        nameLabel = new Label("Nom: " + name.get());
-        descriptionLabel = new Label("Descripció: " + description.get());
-        priceLabel = new Label("Preu: " + price.get());
+        nameLabel = new Label(name.get());
+        nameLabel.getStyleClass().add("nameLabel");
+        descriptionLabel = new Label(description.get());
+        descriptionLabel.getStyleClass().add("descriptionLabel");
+        priceLabel = new Label(price.get() + "€");
+        priceLabel.getStyleClass().add("priceLabel");
         tagsList = new VBox();
+        tagsList.getStyleClass().add("tagsList");
         for (String tag : tags) {
-            tagsList.getChildren().add(new Label(tag));
+            Label tagLabel = new Label(tag);
+            tagLabel.getStyleClass().add("tag");
+            tagsList.getChildren().add(tagLabel);
         }
         tagsList.setAlignment(Pos.CENTER_LEFT);
         imageView = new ImageView(ImageUtils.getImageFromBase64(product.getImageBase64()));
         imageView.setFitWidth(100);
         imageView.setFitHeight(100);
         imageView.setPreserveRatio(true);
+        imageView.getStyleClass().add("imageView");
 
-        mainContainer = new HBox(imageView, idLabel, nameLabel, tagsList, descriptionLabel, priceLabel);
+        mainContainer = new HBox(imageView, nameLabel, tagsList, descriptionLabel, priceLabel);
         mainContainer.setSpacing(10);
         mainContainer.setAlignment(Pos.CENTER_LEFT);
+        mainContainer.getStyleClass().add("productContainer");
         getChildren().add(mainContainer);
 
         setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);

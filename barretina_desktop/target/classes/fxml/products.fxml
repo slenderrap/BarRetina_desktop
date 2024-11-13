@@ -7,12 +7,12 @@
 
 <VBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.Views.ProductsControler">
    <children>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <ScrollPane prefHeight="200.0" prefWidth="200.0" styleClass="scrollPane" VBox.vgrow="ALWAYS">
          <content>
-            <VBox fx:id="productsList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" />
+            <VBox fx:id="productsList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" styleClass="listContainer" />
          </content>
       </ScrollPane>
-      <Button mnemonicParsing="false" onAction="#onBackButtonClick" text="Back" />
+      <Button mnemonicParsing="false" onAction="#onBackButtonClick" text="Back" styleClass="btn" />
    </children>
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
