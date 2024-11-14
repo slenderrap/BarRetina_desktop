@@ -34,6 +34,7 @@ public class ConfigurationControler {
         }
         UtilsConfig.saveConfig(serverUrl, placeTextField.getText());
         UtilsWS.init(serverUrl.toString());
+        //anyadir gif espera
         UtilsViews.setView("CommandList");
     }
 }
