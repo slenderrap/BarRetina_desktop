@@ -1,6 +1,7 @@
 package com.project.Utils;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -17,6 +18,7 @@ public class UtilsWS extends WebSocketClient {
     private static String location = "";
     private static AtomicBoolean exitRequested = new AtomicBoolean(false); // Thread safe
     private static AtomicBoolean isConnected = new AtomicBoolean(false);
+    private static CountDownLatch connectionLatch = new CountDownLatch(1);
 
     private UtilsWS (String location, Draft draft) throws URISyntaxException {
         super (new URI(location), draft);
@@ -25,9 +27,15 @@ public class UtilsWS extends WebSocketClient {
     public static void init (String location) {
         UtilsWS.location = location;
         if (sharedInstance == null) {
+            connectionLatch = new CountDownLatch(1);
             try {
                 sharedInstance = new UtilsWS(UtilsWS.location, (Draft) new Draft_6455());
                 sharedInstance.connect();
+                try {
+                    connectionLatch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 isConnected.set(true);
             } catch (URISyntaxException e) { 
                 System.out.println("WS Error, " + location + " is not a valid URI");
@@ -61,6 +69,7 @@ public class UtilsWS extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshake) {
         System.out.println("WS connected with: " + getURI() + ", to " + getRemoteSocketAddress());
+        connectionLatch.countDown();
     }
 
     @Override
@@ -74,6 +83,7 @@ public class UtilsWS extends WebSocketClient {
 
     @Override
     public void onError(Exception e) {
+        connectionLatch.countDown();
         System.out.println("WS connection error: " + e.getMessage());
         e.printStackTrace();
         if (e.getMessage().contains("Connection refused") || e.getMessage().contains("Connection reset")) {

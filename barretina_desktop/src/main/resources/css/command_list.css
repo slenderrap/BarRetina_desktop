@@ -4,8 +4,8 @@
 }
 
 .btn {
+    -fx-font-size: 16px;
     -fx-font-family: "SourceSerifPro";
-    -fx-font-size: 25px;
     -fx-background-color: #479055;
     -fx-text-fill: white;
     -fx-padding: 8px 15px;
@@ -15,5 +15,75 @@
 
 .btn:hover {
     -fx-background-color: #366d41;
+}
+
+.scrollPane {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
+}
+
+.commandsList {
+    -fx-spacing: 10px;
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 5px;
+}
+
+.idLabel {
+    -fx-font-family: "SourceSerifPro";
+    -fx-font-size: 16px;
+    -fx-padding: 5px;
+}
+
+.tableLabel {
+    -fx-font-size: 16px;
+    -fx-padding: 5px;
+}
+
+.statusLabel {
+    -fx-font-size: 16px;
+    -fx-padding: 3px 8px;
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+}
+
+.dateLabel {
+    -fx-font-size: 16px;
+    -fx-padding: 5px;
+}
+
+.priceLabel {
+    -fx-font-size: 16px;
+    -fx-padding: 5px;
+    -fx-alignment: center-right;
+}
+
+.commandContainer {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-padding: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);
+    -fx-cursor: hand;
+}
+
+.commandContainer:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 12, 0, 0, 0);
+    -fx-background-color: #fafafa;
+}
+
+/* Status-specific colors */
+.statusLabel.PENDING {
+    -fx-background-color: #900C3F;
+    -fx-text-fill: #ffffff;
+}
+
+.statusLabel.PAYING {
+    -fx-background-color: #4393D2;
+    -fx-text-fill: #000000;
+}
+
+.statusLabel.PAID {
+    -fx-background-color: #468E55;
+    -fx-text-fill: #000000;
 }
 

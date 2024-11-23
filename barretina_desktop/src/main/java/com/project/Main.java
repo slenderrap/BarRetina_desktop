@@ -13,6 +13,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        UtilsViews.addView(Main.class, "DetailCommand", "/fxml/detail_command.fxml", "/css/detail_command.css");
         UtilsViews.addView(Main.class, "Configuration", "/fxml/configuration.fxml", "/css/configuration.css");
         UtilsViews.addView(Main.class, "CommandList", "/fxml/command_list.fxml", "/css/command_list.css");
         UtilsViews.addView(Main.class, "Products", "/fxml/products.fxml", "/css/products.css");
