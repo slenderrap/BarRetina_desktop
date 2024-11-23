@@ -1,0 +1,32 @@
+.commandProductContainer {
+    -fx-padding: 10px;
+    -fx-background-color: white;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 5px;
+}
+
+.commandProductMainContainer {
+    -fx-padding: 10px;
+    -fx-background-color: ligth;
+    -fx-border-color: #adadad;
+    -fx-border-radius: 5px;
+}
+
+.commandProductContainer .nameLabel {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.commandProductContainer .quantityLabel {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666;
+}
+
+.commandProductContainer .priceLabel {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.commandProductContainer .statusComboBox {
+    -fx-pref-width: 120px;
+}
