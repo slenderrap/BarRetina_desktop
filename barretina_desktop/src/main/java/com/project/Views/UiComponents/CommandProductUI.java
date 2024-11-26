@@ -11,7 +11,10 @@ import javafx.event.EventHandler;
 
 import java.util.Optional;
 
+import org.json.JSONObject;
+
 import com.project.Utils.ImageUtils;
+import com.project.Utils.UtilsWS;
 import com.project.Views.UiComponents.ProductStatus.Status;
 
 public class CommandProductUI extends Region {
@@ -25,21 +28,22 @@ public class CommandProductUI extends Region {
     private ComboBox<String> statusComboBox;
     private Runnable onStatusChange;
     private CommandProduct commandProduct;
+    private int commandId;
 
-    public CommandProductUI(CommandProduct commandProduct, Runnable onStatusChange) {
-        // Initialize properties
+    public CommandProductUI(CommandProduct commandProduct, int commandId, Runnable onStatusChange) {
+        this.onStatusChange = onStatusChange;
+        this.commandProduct = commandProduct;
+        this.commandId = commandId;
+        buildLayout();
+    }
+
+    public void buildLayout() {
+        //Sync properties
         this.product.set(commandProduct.getProduct());
         this.quantity.set(commandProduct.getQuantity());
         this.status.set(commandProduct.getStatus());
         this.quantityPaid.set(commandProduct.getQuantityPaid());
-        this.onStatusChange = onStatusChange;
-        this.commandProduct = commandProduct;
 
-        buildLayout();
-
-    }
-
-    private void buildLayout() {
         mainContainer = new VBox();
         this.getChildren().clear();
 
@@ -107,8 +111,12 @@ public class CommandProductUI extends Region {
         Label priceLabel = new Label(String.format("%.2f€", totalPrice));
         priceLabel.getStyleClass().add("priceLabel");
         HBox productContainer;
+        boolean nothingPaid = quantityPaid.get() == 0 && status.get().equals(ProductStatus.Status.READY);
         if (combobox) {
             productContainer = new HBox(imageView, nameLabel, quantityLabel, statusComboBox, priceLabel);
+            if (nothingPaid) {
+                productContainer.getChildren().add(payButton);
+            }
         }
         else {
             productContainer = new HBox(imageView, nameLabel, quantityLabel, statusLabel, priceLabel, payButton);
@@ -178,16 +186,24 @@ public class CommandProductUI extends Region {
                 if (commandProduct.getQuantityPaid() == commandProduct.getQuantity()) {
                     commandProduct.setStatus(ProductStatus.Status.PAID);
                 }
-                quantityPaid.set(commandProduct.getQuantityPaid());
-                status.set(commandProduct.getStatus());
+                JSONObject json = new JSONObject();
+                json.put("type", "payAmount");
+                json.put("commandId", commandId);
+                json.put("productId", commandProduct.getProduct().getId());
+                json.put("amount", amount);
+                UtilsWS.getSharedInstance().safeSend(json.toString());
                 buildLayout();
             }
             else if (response == payAllButtonType) {
+                JSONObject json = new JSONObject();
+                json.put("type", "payAmount");
+                json.put("commandId", commandId);
+                json.put("productId", commandProduct.getProduct().getId());
+                json.put("amount", commandProduct.getQuantity() - commandProduct.getQuantityPaid());
                 commandProduct.setQuantityPaid(commandProduct.getQuantity());
                 commandProduct.setStatus(ProductStatus.Status.PAID);
-                quantityPaid.set(commandProduct.getQuantityPaid());
-                status.set(commandProduct.getStatus());
                 buildLayout();
+                UtilsWS.getSharedInstance().safeSend(json.toString());
             }
         });
     }

@@ -37,6 +37,14 @@ public class UtilsProduct {
         ws.setOnMessage((json) -> {
             try {
                 JSONObject jsonObject = new JSONObject(json);
+                String type = jsonObject.getString("type");
+                if (!type.equals("ack")) {
+                    return;
+                }
+                String responseType = jsonObject.getString("responseType");
+                if (!responseType.equals("getProducts")) {
+                    return;
+                }
                 JSONArray jsonArray = jsonObject.getJSONArray("products");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject productJson = jsonArray.getJSONObject(i);
@@ -61,6 +69,7 @@ public class UtilsProduct {
                 return product;
             }
         }
+
         return null;
     }
 }

@@ -13,7 +13,8 @@
             "request": "launch",
             "mainClass": "com.project.Main",
             "projectName": "barretina_Desktop",
-            "vmArgs": "--module-path C:\\Users\\Oscar\\Desktop\\GIt\\javafx-sdk-22.0.1\\lib --add-modules javafx.controls,javafx.fxml"
+            /* Instituto */ //"vmArgs": "--module-path C:\\Users\\Oscar\\Desktop\\GIt\\javafx-sdk-22.0.1\\lib --add-modules javafx.controls,javafx.fxml",
+            /* Casa */ "vmArgs": "--module-path C:\\\"Program Files\"\\Java\\javafx-sdk-22.0.1\\lib --add-modules javafx.controls,javafx.fxml"
         }
     ]
 }

@@ -9,9 +9,12 @@ import com.project.Utils.UtilsWS;
 import com.project.Views.UiComponents.Command;
 import com.project.Views.UiComponents.CommandProduct;
 import com.project.Views.UiComponents.CommandProductUI;
+import com.project.Views.UiComponents.CommandStatus;
+import com.project.Views.UiComponents.ProductStatus;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
 public class DetailedCommandControler implements OnSceneVisible {
@@ -30,6 +33,7 @@ public class DetailedCommandControler implements OnSceneVisible {
     @Override
     public void onSceneVisible() {
         command.clearProducts();
+        productList.getChildren().clear();
         ws = UtilsWS.getSharedInstance();
         ws.setOnMessage(this::onMessage);
         JSONObject json = new JSONObject();
@@ -58,6 +62,21 @@ public class DetailedCommandControler implements OnSceneVisible {
         UtilsViews.setView("CommandList");
     }
 
+    public void payAll() {
+        JSONObject json = new JSONObject();
+        json.put("type", "payCommand");
+        json.put("commandId", commandId);
+        ws.safeSend(json.toString());
+        //Change parameters
+        command.setStatus(CommandStatus.Status.PAID);
+        for (Node node : productList.getChildren()) {
+            CommandProductUI productUI = (CommandProductUI) node;
+            productUI.setStatus(ProductStatus.Status.PAID);
+            productUI.setQuantityPaid(productUI.getQuantity());
+            productUI.buildLayout();
+        }
+    }
+
     public void onGetCommandMessage(JSONObject json) {
         JSONArray jsonArray = json.getJSONArray("products");
         command.clearProducts();
@@ -67,8 +86,17 @@ public class DetailedCommandControler implements OnSceneVisible {
             System.out.println(productJson.toString());
             CommandProduct product = new CommandProduct(productJson);
             command.addProduct(product);
-            productList.getChildren().add(new CommandProductUI(product, () -> {
-                //no trigger
+            productList.getChildren().add(new CommandProductUI(product, commandId, () -> {
+                if (product.getStatus().equals(ProductStatus.Status.PAID)) {
+                    JSONObject json2 = new JSONObject();
+                    json2.put("type", "payAmount");
+                    json2.put("commandId", commandId);
+                    json2.put("productId", product.getProduct().getId());
+                    json2.put("amount", product.getQuantity() - product.getQuantityPaid());
+                    product.setQuantityPaid(product.getQuantity());
+                    product.setStatus(ProductStatus.Status.PAID);
+                    ws.safeSend(json2.toString());
+                }
             }));
         }
     }
