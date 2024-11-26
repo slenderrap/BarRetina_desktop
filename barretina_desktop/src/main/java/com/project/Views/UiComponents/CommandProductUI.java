@@ -6,8 +6,13 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.geometry.Pos;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
+import java.util.Optional;
 
 import com.project.Utils.ImageUtils;
+import com.project.Views.UiComponents.ProductStatus.Status;
 
 public class CommandProductUI extends Region {
     private final ObjectProperty<Product> product = new SimpleObjectProperty<>();
@@ -18,6 +23,8 @@ public class CommandProductUI extends Region {
     // UI Components
     private VBox mainContainer;
     private ComboBox<String> statusComboBox;
+    private Runnable onStatusChange;
+    private CommandProduct commandProduct;
 
     public CommandProductUI(CommandProduct commandProduct, Runnable onStatusChange) {
         // Initialize properties
@@ -25,20 +32,22 @@ public class CommandProductUI extends Region {
         this.quantity.set(commandProduct.getQuantity());
         this.status.set(commandProduct.getStatus());
         this.quantityPaid.set(commandProduct.getQuantityPaid());
+        this.onStatusChange = onStatusChange;
+        this.commandProduct = commandProduct;
 
-        buildLayout(commandProduct, onStatusChange);
+        buildLayout();
 
     }
 
-    private void buildLayout(CommandProduct commandProduct, Runnable onStatusChange) {
+    private void buildLayout() {
         mainContainer = new VBox();
         this.getChildren().clear();
 
         if (status.get().equals(ProductStatus.Status.READY) && quantityPaid.get() != 0 && quantityPaid.get() != quantity.get()) {
-            mainContainer.getChildren().add(createProductContainer(commandProduct, onStatusChange, quantity.get()-quantityPaid.get(), true));
-            mainContainer.getChildren().add(createProductContainer(commandProduct, onStatusChange, quantityPaid.get(), false));
+            mainContainer.getChildren().add(createProductContainer(quantity.get()-quantityPaid.get(), true));
+            mainContainer.getChildren().add(createProductContainer(quantityPaid.get(), false));
         } else {
-            mainContainer.getChildren().add(createProductContainer(commandProduct, onStatusChange, quantity.get(), true));
+            mainContainer.getChildren().add(createProductContainer(quantity.get(), true));
         }
 
         mainContainer.setSpacing(10);
@@ -53,7 +62,7 @@ public class CommandProductUI extends Region {
     }
 
 
-    private HBox createProductContainer(CommandProduct commandProduct, Runnable onStatusChange, int quantity, boolean combobox) {
+    private HBox createProductContainer(int quantity, boolean combobox) {
         // Initialize UI Components
         Label nameLabel = new Label(product.get().getName());
         nameLabel.getStyleClass().add("nameLabel");
@@ -73,12 +82,20 @@ public class CommandProductUI extends Region {
                 String selectedStatus = statusComboBox.getValue();
                 commandProduct.setStatus(ProductStatus.valueOf(selectedStatus));
                 setStatus(commandProduct.getStatus());
-                buildLayout(commandProduct, onStatusChange);
+                buildLayout();
                 if (onStatusChange != null) {
                     onStatusChange.run();
                 }
             });
         }
+
+        Button payButton = new Button("Pagar");
+        payButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent arg0) {
+                PayDialog();
+            }
+        });
 
         ImageView imageView = new ImageView(ImageUtils.getImageFromBase64(product.get().getImageBase64()));
         imageView.setFitWidth(100);
@@ -93,8 +110,9 @@ public class CommandProductUI extends Region {
         if (combobox) {
             productContainer = new HBox(imageView, nameLabel, quantityLabel, statusComboBox, priceLabel);
         }
-        else
-            productContainer = new HBox(imageView, nameLabel, quantityLabel, statusLabel, priceLabel);
+        else {
+            productContainer = new HBox(imageView, nameLabel, quantityLabel, statusLabel, priceLabel, payButton);
+        }
         productContainer.setSpacing(10);
         productContainer.setAlignment(Pos.CENTER_LEFT);
         productContainer.getStyleClass().add("commandProductContainer");
@@ -110,6 +128,68 @@ public class CommandProductUI extends Region {
             getWidth() - getInsets().getLeft() - getInsets().getRight(),
             getHeight() - getInsets().getTop() - getInsets().getBottom()
         );
+    }
+
+    public void PayDialog() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType cancelButtonType = new ButtonType("Cancelar", ButtonBar.ButtonData.LEFT);
+        ButtonType payAmountButtonType = new ButtonType("Pagar Quantitat", ButtonBar.ButtonData.RIGHT);
+        ButtonType payAllButtonType = new ButtonType("Pagar tot", ButtonBar.ButtonData.RIGHT);
+        
+        alert.getButtonTypes().setAll(cancelButtonType, payAmountButtonType, payAllButtonType);
+        alert.setTitle("Pay " + product.get().getName());
+        alert.setHeaderText("¿Cuántas unidades desea pagar?");
+
+        TextField amountTextField = new TextField();
+        alert.getDialogPane().setContent(amountTextField);
+        
+        Button payAmountButton = (Button) alert.getDialogPane().lookupButton(payAmountButtonType);
+        payAmountButton.addEventFilter(ActionEvent.ACTION, e -> {
+            System.out.println("Pay Amount");
+            //validate amount
+            int amount = 0;
+            try {
+                amount = Integer.parseInt(amountTextField.getText());
+            } catch (NumberFormatException ex) {
+                e.consume();
+                System.out.println("not a number");
+                return;
+            }
+            if (amount <= 0 || amount > quantity.get() - quantityPaid.get()) {
+                e.consume();
+                System.out.println("too much");
+                return;
+            }
+        });
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == payAmountButtonType) {
+                System.out.println("Pay Amount response");
+                int amount = Integer.parseInt(amountTextField.getText());
+
+                System.out.println("amount: " + amount);
+                System.out.println("quntity paid: " + commandProduct.getQuantityPaid());
+                System.out.println("quntity: " + commandProduct.getQuantity());
+
+                commandProduct.setQuantityPaid(commandProduct.getQuantityPaid()+amount);
+
+                System.out.println("quntity paid: " + commandProduct.getQuantityPaid());
+                System.out.println("quntity: " + commandProduct.getQuantity());
+                if (commandProduct.getQuantityPaid() == commandProduct.getQuantity()) {
+                    commandProduct.setStatus(ProductStatus.Status.PAID);
+                }
+                quantityPaid.set(commandProduct.getQuantityPaid());
+                status.set(commandProduct.getStatus());
+                buildLayout();
+            }
+            else if (response == payAllButtonType) {
+                commandProduct.setQuantityPaid(commandProduct.getQuantity());
+                commandProduct.setStatus(ProductStatus.Status.PAID);
+                quantityPaid.set(commandProduct.getQuantityPaid());
+                status.set(commandProduct.getStatus());
+                buildLayout();
+            }
+        });
     }
 
     // Getters and setters for properties

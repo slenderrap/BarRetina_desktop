@@ -29,6 +29,7 @@ public class DetailedCommandControler implements OnSceneVisible {
 
     @Override
     public void onSceneVisible() {
+        command.clearProducts();
         ws = UtilsWS.getSharedInstance();
         ws.setOnMessage(this::onMessage);
         JSONObject json = new JSONObject();

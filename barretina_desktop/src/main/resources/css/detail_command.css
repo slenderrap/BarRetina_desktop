@@ -30,3 +30,13 @@
 .commandProductContainer .statusComboBox {
     -fx-pref-width: 120px;
 }
+
+.btn {
+    -fx-font-size: 16px;
+    -fx-font-family: "SourceSerifPro";
+    -fx-background-color: #479055;
+    -fx-text-fill: white;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
